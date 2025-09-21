@@ -13,34 +13,17 @@ Shapes3D – For 3D shapes and picking functionality.
 
 Make sure the versions of these libraries are compatible with Processing 4.x.
 
-3. Assets
-
-The project uses several image files for UI buttons and elements. Place them in the data/ folder of your sketch:
-
-data/
-├── WireFrameDisabled.png
-├── WireFrameEnabled.png
-├── SolidDisabled.png
-├── SolidEnabled.png
-├── Save.png
-├── InputFile.png
-├── Keys.png
-├── Keybinds.png
-├── TextInput.png
-├── FileName.png
-└── ConfirmOrReject.png
-
-4. Input Files
+3. Input Files
 
 The program requires a minimum CSV file (e.g., template.csv) with the following headers:
 Name, X, Y, Z, Group, Year of Birth, Grade, Gender
 
-5. Hardware
+45. Hardware
 
 A display capable of 1920×1080 resolution for optimal viewing.
 A system capable of running Processing P3D sketches with multiple 3D objects.
 
-6. Running the Sketch
+5. Running the Sketch
 
 Open Spreadsheet.pde in Processing.
 Ensure the data/ folder contains all images.
