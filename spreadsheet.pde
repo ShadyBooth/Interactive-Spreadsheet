@@ -4,13 +4,9 @@ import shapes3d.utils.Picked;
 import shapes3d.*;
 import java.util.ArrayList;
 
-// Camera used throughout program.
 PeasyCam cam;
 
-// Lines to store the file we extract from.
 String[] lines;
-
-// Arraylists used to store values in assign2data.csv
 ArrayList<String> headers = new ArrayList<String>();
 ArrayList<String> label = new ArrayList<String>();
 ArrayList<Integer> posX = new ArrayList<Integer>();
@@ -23,19 +19,15 @@ ArrayList<String> gender = new ArrayList<String>();
 ArrayList<Boolean> solids = new ArrayList<Boolean>();
 ArrayList<Boolean> wireFrames = new ArrayList<Boolean>();
 
-// Shapes
 ArrayList<Shape> shapes = new ArrayList<Shape>();
 ArrayList<Shape> savedShapes = new ArrayList<Shape>();
 ArrayList<Shape> copyShapes = new ArrayList<Shape>();
 
-// Features
 ArrayList<Features> features = new ArrayList<Features>();
 ArrayList<Features> savedFeatures = new ArrayList<Features>();
 ArrayList<Features> copyFeatures = new ArrayList<Features>();
 
-// UI
 PGraphics pg;
-// wireFrame0, wireFrame1, solid0, solid1,
 PImage wireFrameImage, solidImage, save, inputFile, 
 FileName, TextInput, confirmDeny, Keys, Keybinds, NotBound, Bound;
 
@@ -92,7 +84,7 @@ void setup()
   cam.setMaximumDistance(2500);
   cam.rotateY(radians(10));
   cam.rotateX(radians(0));
-  cam.lookAt(170,700,0);
+  cam.lookAt(0,700,0);
   cam.setSuppressRollRotationMode();
    
   smooth();
@@ -101,7 +93,7 @@ void setup()
 void draw()
 {
   pg.beginDraw();
-  pg.background(255);
+  pg.background(155);
   pg.lights();
   displayGraph();
 
