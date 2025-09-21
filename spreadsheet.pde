@@ -44,7 +44,7 @@ int entries = 0;
 boolean selectFileInput = false, copied = false, saveInputFile = false;
 
 //Font
-PFont font;
+PFont myFont;
 
 // Picked Shape.
 Picked picked = null;
@@ -66,6 +66,10 @@ void setup()
   pg = createGraphics(width, 1100, P3D);
   cam = new PeasyCam(this, pg, 500,1100/2,0,1000);
 
+  // Text Font
+  myFont = loadFont("ArialMT-48.vlw");
+  textFont(myFont);
+
   // UI Buttons
   wireFrameImage = loadImage("data/WireFrameDisabled.png");
   solidImage = loadImage("data/SolidDisabled.png");
@@ -82,8 +86,8 @@ void setup()
   // Camera setup
   cam.setDistance(1800);
   cam.setMaximumDistance(2500);
-  cam.rotateY(radians(10));
-  cam.rotateX(radians(0));
+  cam.rotateY(radians(0));
+  cam.rotateX(radians(10));
   cam.lookAt(0,700,0);
   cam.setSuppressRollRotationMode();
    
@@ -93,7 +97,7 @@ void setup()
 void draw()
 {
   pg.beginDraw();
-  pg.background(155);
+  pg.background(255);
   pg.lights();
   displayGraph();
 
@@ -117,26 +121,26 @@ void draw()
   image(inputFile, 1720, 0);
   image(save, 1820, 0);
 
-  for (Shape shape : shapes)
+  for (Shape s : shapes)
   {
-    if (keyCode == ALT && shape.selected == true)
+    if (keyCode == ALT && s.selected == true)
     {
       cam.setActive(false);
 
-      shape.posX += mouseX - pmouseX;
+      s.posX += mouseX - pmouseX;
 
       if (inverted == 1)
       {
-        shape.posZ += mouseY - pmouseY;
+        s.posZ += mouseY - pmouseY;
       }
       if (inverted == 0)
       {
-        shape.posY += mouseY - pmouseY;
+        s.posY += mouseY - pmouseY;
       }
 
-      shape.posX = constrain(shape.posX, 0, 1000);
-      shape.posY = constrain(shape.posY, 0, 1000);
-      shape.posZ = constrain(shape.posZ, 0, 1000);
+      s.posX = constrain(shape.posX, 0, 1000);
+      s.posY = constrain(shape.posY, 0, 1000);
+      s.posZ = constrain(shape.posZ, 0, 1000);
     }
   }
 
@@ -156,7 +160,7 @@ void draw()
     else
     {
       // If not, checks if its reached the limit.
-      if (namedFile.length() < 28)
+      if (namedFile.length() < 26)
       {
         // If not, it prints what the user has typed.
        text(namedFile, 850, 460);
@@ -187,41 +191,40 @@ void mouseClicked()
   // Switches between bools when the button is pressed.
   if (mouseX > 0 && mouseX < 100 && mouseY > 0 && mouseY < 100)
   {
-    for (Shape shape : shapes)
+    for (Shape s : shapes)
     {
-      if (shape.solid == false)
+      if (s.solid == false)
       {
-        shape.solid = true;
+        s.solid = true;
         solidImage = loadImage("data/SolidEnabled.png");
       }
       else
       {
-        shape.solid = false;
+        s.solid = false;
         solidImage = loadImage("data/SolidDisabled.png");
       }
-      shape.resetShapes = true;
+      s.resetShapes = true;
     }
   }
 
   // Switches between bools when the button is pressed.
   if (mouseX > 100 && mouseX < 200 && mouseY > 0 && mouseY < 100)
   {
-    for (Shape shape : shapes)
+    for (Shape s : shapes)
     {
-      if (shape.wireFrame == false)
+      if (s.wireFrame == false)
       {
-        shape.wireFrame = true;
+        s.wireFrame = true;
         wireFrameImage = loadImage("data/WireFrameEnabled.png");
       }
       else
       {
-        shape.wireFrame = false;
+        s.wireFrame = false;
         wireFrameImage = loadImage("data/WireFrameDisabled.png");
       }
-      shape.resetShapes = true;
+      s.resetShapes = true;
     }
   }
-
   
   if (mouseX > 1720 && mouseX < 1820 && mouseY > 0 && mouseY < 100)
   {
@@ -278,18 +281,18 @@ void mouseClicked()
     // If the user is not selecting ctrl, reset all selected.
     if (keyCode != 17)
     {
-      for (Shape shape : shapes)
+      for (Shape s : shapes)
       {
-        shape.selected = false;
+        s.selected = false;
       }
     }
 
     // Check for the shape, and make it selected.
-    for (Shape shape : shapes)
+    for (Shape s : shapes)
     {
-      if (shape.shape == picked.shape)
+      if (s.shape == picked.shape)
       {
-        shape.selected = true;
+        s.selected = true;
       }
     }
   }
@@ -300,14 +303,14 @@ void keyPressed()
   // Moving the shapes, if they're selected.
   if (key == 'u' && saveInputFile == false)
   {
-    for (Shape shape : shapes)
+    for (Shape s : shapes)
     {
-      if (shape.selected == true)
+      if (s.selected == true)
       {
-        shape.grade++;
-        shape.size = 5 + shape.grade * 3;
-        shape.resetShapes = true;
-        shape.grade = constrain(shape.grade, 0, 30);
+        s.grade++;
+        s.size = 5 + shape.grade * 3;
+        s.resetShapes = true;
+        s.grade = constrain(shape.grade, 0, 30);
       }
     }
     key = 0;
@@ -315,14 +318,14 @@ void keyPressed()
     
   if (key == 'd' && saveInputFile == false)
   {
-    for (Shape shape : shapes)
+    for (Shape s : shapes)
     {
-      if (shape.selected == true)
+      if (s.selected == true)
       {
-        shape.grade--;
-        shape.size = 5 + (shape.grade * 3);
-        shape.resetShapes = true;
-        shape.grade = constrain(shape.grade, 0, 30);
+        s.grade--;
+        s.size = 5 + (shape.grade * 3);
+        s.resetShapes = true;
+        s.grade = constrain(shape.grade, 0, 30);
       }
     }
     key = 0;
@@ -342,6 +345,7 @@ void keyPressed()
     }
   }
 
+    // Priming it from 'c'
     if (key == 'c' && copied == false)
     {
       copied = true;
@@ -355,32 +359,27 @@ void keyPressed()
       }
     }
 
+    // Pasting it to 'v'
     if (key == 'v' && copied == true)
     {
       copied = false;
-      for (Shape copyShapes : copyShapes)
-      {
-        // Recreate it, properly do it so the arraylist doesn't get confused and remove duplicates.
-        posX.add(copyShapes.posX);
-        posY.add(1000-copyShapes.posY-copyShapes.grade*10);
-        posZ.add(copyShapes.posZ);
-        group.add(copyShapes.type);
-        birthYear.add(copyShapes.birthYear);
-        grade.add(copyShapes.grade);
-        label.add(copyShapes.label);
-        gender.add(copyShapes.gender);
-
-        shapes.add(new Shape(posX.get(objects), posY.get(objects), posZ.get(objects), group.get(objects), birthYear.get(objects), grade.get(objects), label.get(objects), gender.get(objects)));
-        features.add(new Features(copyShapes.birthYear));
-
-        objects++;
-      }   
-
-      for (int i = copyShapes.size(); i > 0; i--)
-      {
-        copyShapes.remove(i-1);
+      for (Shape s : copyShapes) {
+        Shape newShape = new Shape(
+          s.posX,
+          1000 - s.posY - s.grade * 10,
+          s.posZ,
+          s.type,
+          s.birthYear,
+          s.grade,
+          s.label,
+          s.gender
+        );
+          shapes.add(newShape);
+          features.add(new Features(s.birthYear));
+          objects++;
+        }
+        copyShapes.clear();
       }
-    }
   
   if (key == 'i')
     {
@@ -458,298 +457,3 @@ void keyReleased()
   key = ' ';  
   cam.setActive(true);
 }
-
-void fileSelected(File file) 
-{
-  if (file == null)
-  {
-    println("No file found, or the user has exited");
-  }
-  else
-  {
-    lines = loadStrings(file);
-    objects = lines.length-1;
-    processFile();
-  }
-}
-
-void displayGraph()
-{
-  pg.stroke(color(255,0,0));
-  pg.strokeWeight(2);
-  pg.beginShape(SHAPE);
-  pg.vertex(0, 0, 0);
-  pg.vertex(0, 1000, 0);
-  pg.endShape();
-  pg.beginShape(SHAPE);
-  pg.vertex(0, 1000, 0);
-  pg.vertex(0, 1000, 1000);
-  pg.endShape();
-  pg.beginShape(SHAPE);
-  pg.vertex(0, 1000, 0);
-  pg.vertex(1000, 1000, 0);
-  pg.endShape();
-  //Axis text
-  pg.pushMatrix();
-  float[] rotations = cam.getRotations();
-  for (int i = 0; i < 1000; i+= 200){
-    pg.fill(color(255,0,0));
-    pg.pushMatrix();
-    pg.noLights();
-    pg.translate(10,i+10,0);
-    pg.rotateX(rotations[0]);
-    pg.rotateY(rotations[1]);
-    pg.rotateZ(rotations[2]);
-    pg.textSize((float)(cam.getDistance()/60));
-    pg.text(1000-i, 0, 0, 0);
-    pg.popMatrix();
-    
-    pg.pushMatrix();
-    pg.translate(i+150, 980,0);
-    pg.rotateX(rotations[0]);
-    pg.rotateY(rotations[1]);
-    pg.rotateZ(rotations[2]);
-    pg.textSize((float)(cam.getDistance()/60));
-    pg.text(i+200, 0, 0, 0);
-    pg.popMatrix();
-    
-    pg.pushMatrix();
-    pg.translate(-50, 980, i+150);
-    pg.rotateX(rotations[0]);
-    pg.rotateY(rotations[1]);
-    pg.rotateZ(rotations[2]);
-    pg.textSize((float)(cam.getDistance()/60));
-    pg.text(i+200, 0, 0, 0);
-    pg.lights();
-    pg.popMatrix();
-  }
-  pg.popMatrix();
-}
-void processFile()
-{
-  // Clears all ArrayList.
-  headers.clear();
-  label.clear();
-  posX.clear();
-  posY.clear();
-  posZ.clear();
-  group.clear();
-  birthYear.clear();
-  grade.clear();
-  gender.clear();
-  solids.clear();
-  wireFrames.clear();
-  shapes.clear();
-  savedShapes.clear();
-  copyShapes.clear();
-  features.clear();
-  savedFeatures.clear();
-  copyFeatures.clear();
-
-  String[] headerData = splitTokens(lines[0], ",");
-  for (int i = 0; i < headerData.length; i++) {
-    headers.add(headerData[i]);
-  }
-  //Handles getting data from assign1data.csv and assigning it to arrays
-  if (headers.contains("solid") == false)
-  {
-    headers.add("solid");
-  }
-
-  if (headers.contains("wireFrame") == false)
-  {
-    headers.add("wireFrame");
-  }
-
-  for (int i = 1; i < lines.length; i++) // Starting at 1 to remove the header row from the object arrays.
-  {
-    String[] infoBit = splitTokens(lines[i], ",");
-    for (int j = 0; j < infoBit.length; j++) {
-      if (headers.get(j).equals("Name"))
-      {
-        label.add(infoBit[j]);
-        continue;
-      }
-      if (headers.get(j).equals("X")) 
-      {
-        posX.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Y")) 
-      {
-        posY.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Z")) 
-      {
-        posZ.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Group")) 
-      {
-        group.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Year of Birth")) 
-      {
-        birthYear.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Grade")) 
-      {
-        grade.add(Integer.parseInt(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("Gender")) 
-      {
-        gender.add(infoBit[j]);
-        continue;
-      }
-      if (headers.get(j).equals("solid"))
-      {
-        solids.add(parseBoolean(infoBit[j]));
-        continue;
-      }
-      if (headers.get(j).equals("wireFrame"))
-      {
-        wireFrames.add(parseBoolean(infoBit[j]));
-        continue;
-      }
-    }
-  }
-
-
-  for (int i = 0; i < objects; i++)
-  {
-    if (solids.size() != objects)
-    {
-      solids.add(false);
-    }
-    if (wireFrames.size() != objects)
-    {
-      wireFrames.add(false);
-    }
-  }
-
-  for (int i = 0; i < objects; i++)
-  {
-    shapes.add(new Shape(posX.get(i), posY.get(i), posZ.get(i), group.get(i), birthYear.get(i), grade.get(i), label.get(i), gender.get(i)));
-    features.add(new Features(birthYear.get(i)));
-    //Calculates the age in order to calculate the colours that is associated with the birth year 
-    
-    if (solids.size() == objects)
-    shapes.get(i).solid = solids.get(i);
-
-    if (wireFrames.size() == objects)
-    shapes.get(i).wireFrame = wireFrames.get(i);
-
-    if (birthYear.get(i) > oldestAge) 
-    {
-      oldestAge = birthYear.get(i);
-    }
-    youngestAge = birthYear.get(0);
-    if (birthYear.get(i) < youngestAge) 
-    {
-      youngestAge = birthYear.get(i);
-    }
-    midAge = oldestAge - (oldestAge - youngestAge)/2;
-  }
-
-  if (solids.get(0) == true)
-  {
-    solidImage = loadImage("data/SolidEnabled.png");
-  }
-
-  if (wireFrames.get(0) == true)
-  {
-    wireFrameImage = loadImage("data/WireFrameEnabled.png");
-  }
-}
-
-void saveFile()
-{
-  for (int i = 0; i < headers.size(); i++)
-  {
-    output.print(headers.get(i));
-    if (i == headers.size()-1)
-    {
-      output.println("");
-      break;
-    } 
-    output.print(",");
-  }
-
-  for (int i = 0; i < objects; i++)
-  {
-    for (int j = 0; j < headers.size(); j++)
-    {
-      if (headers.get(j).equals("Name"))
-      {
-        output.print(shapes.get(i).label);
-      }
-      
-      if (headers.get(j).equals("X"))
-      {
-        output.print(shapes.get(i).posX);
-      }
-      
-      if (headers.get(j).equals("Group"))
-      {
-        output.print(shapes.get(i).type);
-      }
-
-      if (headers.get(j).equals("Year of Birth"))
-      {
-        output.print(shapes.get(i).birthYear);
-      }
-
-      if (headers.get(j).equals("Grade"))
-      {
-        output.print(shapes.get(i).grade);
-      }
-      
-      if (headers.get(j).equals("Gender"))
-      {
-        output.print(shapes.get(i).gender);
-      }
-
-      if (headers.get(j).equals("Y"))
-      {
-        output.print(-shapes.get(i).posY+1000);
-      }
-
-      if (headers.get(j).equals("Z"))
-      {
-        output.print(shapes.get(i).posZ);
-      }
-
-      if (headers.get(j).equals("Colour"))
-      {
-        output.print(shapes.get(i).shapeColour);
-      }
-
-      if (headers.get(j).equals("solid"))
-      {
-        output.print(shapes.get(i).solid);
-      }
-
-      if (headers.get(j).equals("wireFrame"))
-      {
-        output.print(shapes.get(i).wireFrame);
-      }
-
-      printComma(j);
-    }
-    output.println("");
-  }
-
-  output.close();
-}
-
-void printComma(int i)
-{
-  if (i != headers.size()-1)
-    {
-      output.print(",");
-    } 
-} 
