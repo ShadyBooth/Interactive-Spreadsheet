@@ -159,7 +159,7 @@ void draw()
     // Checks if there is data in the string.
     if (namedFile == null)
     {
-      text("Start Typing...", 650, 460);
+      text("Start Typing...", 850, 460);
     }
     else
     {
@@ -167,12 +167,12 @@ void draw()
       if (namedFile.length() < 28)
       {
         // If not, it prints what the user has typed.
-       text(namedFile, 620, 460);
+       text(namedFile, 850, 460);
       }
       // If it has, it'll print that it has too many characters.
-      if (namedFile.length() > 27)
+      if (namedFile.length() > 26)
       {
-        text("Too many characters", 670, 460);
+        text("Too many characters", 8, 460);
       }
     }
   }
@@ -243,17 +243,19 @@ void mouseClicked()
     if (saveInputFile == false)
     {
       saveInputFile = true;
+      cam.setActive(false);
     }
     else if (saveInputFile == true)
     {
       saveInputFile = false;
+      cam.setActive(true);
     }
   }
 
   // Switches between bools when the button is pressed.
   if (saveInputFile == true) 
   {
-    if (mouseX > 600 && mouseX < 800 && mouseY > 500 && mouseY < 600 || keyCode == ENTER) // Confirm
+    if (mouseX > 920 && mouseX < 1120 && mouseY > 500 && mouseY < 600 || keyCode == ENTER) // Confirm
     {
       // Returns if the namedFile has nothing.
       if (namedFile == "")
@@ -261,12 +263,13 @@ void mouseClicked()
         return;
       }
       // Else writes the contents to the file namedFile.
+      namedFile = namedFile + ".csv";
       output = createWriter(namedFile); // Creates an output printwriter.
       saveFile();
       namedFile = "";
     }
 
-    if (mouseX > 800 && mouseX < 1000 && mouseY > 500 && mouseY < 600) // Reject
+    if (mouseX > 1120 && mouseX < 1320 && mouseY > 500 && mouseY < 600) // Reject
     {
       namedFile = "";
     }
@@ -303,7 +306,7 @@ void mouseClicked()
 void keyPressed()
 {
   // Moving the shapes, if they're selected.
-  if (key == 'u')
+  if (key == 'u' && saveInputFile == false)
   {
     for (Shape shape : shapes)
     {
@@ -318,7 +321,7 @@ void keyPressed()
     key = 0;
   }
     
-  if (key == 'd')
+  if (key == 'd' && saveInputFile == false)
   {
     for (Shape shape : shapes)
     {
@@ -332,22 +335,20 @@ void keyPressed()
     }
     key = 0;
   }
-  
-  if (saveInputFile == false)
+
+  if (key == 'z' && saveInputFile == false)
   {
-    if (key == 'z')
+    // Add the data to the shape.
+    if (entries != 0)
     {
-      // Add the data to the shape.
-      if (entries != 0)
-      {
-        shapes.add(objects-1, savedShapes.get(savedShapes.size()-1));
-        features.add(objects-1, savedFeatures.get(savedFeatures.size()-1));
-        savedShapes.remove(savedShapes.size()-1);
-        savedFeatures.remove(savedFeatures.size()-1);
-        objects++;
-        entries--;
-      }
+      shapes.add(objects-1, savedShapes.get(savedShapes.size()-1));
+      features.add(objects-1, savedFeatures.get(savedFeatures.size()-1));
+      savedShapes.remove(savedShapes.size()-1);
+      savedFeatures.remove(savedFeatures.size()-1);
+      objects++;
+      entries--;
     }
+  }
 
     if (key == 'c' && copied == false)
     {
@@ -388,8 +389,6 @@ void keyPressed()
         copyShapes.remove(i-1);
       }
     }
-
-  }
   
   if (key == 'i')
     {
@@ -403,7 +402,7 @@ void keyPressed()
         break;
       }
     }
-
+  
   // When the user backspaces, delete a char.
   if (saveInputFile == true && keyCode == BACKSPACE && namedFile != "")
   {
