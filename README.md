@@ -37,5 +37,5 @@ Use the UI and keyboard shortcuts to interact with the shapes:
 ALT + mouse drag → move selected shapes  
 u/d → increase/decrease grade  
 c → copy, v → paste  
-i → invert axis  
 Backspace → delete shape  
+z → undo deletion
